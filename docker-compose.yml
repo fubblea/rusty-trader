@@ -1,0 +1,11 @@
+version: '3.3'
+services:
+  rusty-trader:
+    container_name: rusty-trader
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    volumes:
+      - .:/app
+    stdin_open: true
+    tty: true
