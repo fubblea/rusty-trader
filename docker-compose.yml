@@ -5,7 +5,9 @@ services:
     build:
       context: ./
       dockerfile: Dockerfile
-    volumes:
-      - .:/app
     ports:
       - 3000:3000
+    environment:
+      - ACCESS_KEY=${ACCESS_KEY}
+      - SECRET_KEY=${SECRET_KEY}
+    entrypoint: bash -c "target/release/rusty-trader"

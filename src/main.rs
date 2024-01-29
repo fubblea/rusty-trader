@@ -1,12 +1,19 @@
-use axum::{
-    routing::get,
-    Router,
-};
+use std::sync::Arc;
+
+use axum::{routing::get, Router};
+
+mod alpaca;
+mod trader;
+
+use alpaca::Alpaca;
 
 #[tokio::main]
 async fn main() {
-    // build our application with a single route
-    let app = Router::new().route("/", get(|| async { "Hello, World!" }));
+    let alpaca_client = Arc::new(Alpaca::new());
+
+    let app = Router::new()
+        .route("/", get(alpaca::get_account))
+        .with_state(alpaca_client);
 
     // run our app with hyper, listening globally on port 3000
     let listener = tokio::net::TcpListener::bind("0.0.0.0:3000").await.unwrap();
