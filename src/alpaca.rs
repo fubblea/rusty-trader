@@ -1,6 +1,3 @@
-use std::sync::Arc;
-
-use axum::extract::State;
 use lazy_static::lazy_static;
 use reqwest::header;
 
@@ -36,20 +33,30 @@ impl Alpaca {
             base_endpoint: "https://paper-api.alpaca.markets/v2".to_string(),
         }
     }
-}
 
-pub async fn get_account(State(alpaca): State<Arc<Alpaca>>) -> String {
-    let endpoint = format!("{}/{}", &alpaca.base_endpoint, "account");
+    pub async fn get_account_details(&self) -> serde_json::Value {
+        let endpoint = format!("{}/{}", &self.base_endpoint, "account");
 
-    let response: serde_json::Value = alpaca
-        .client
-        .get(endpoint)
-        .send()
-        .await
-        .expect("Unable to get account")
-        .json()
-        .await
-        .expect("Unable to convert to json");
+        self.client
+            .get(endpoint)
+            .send()
+            .await
+            .expect("Unable to get account")
+            .json()
+            .await
+            .expect("Unable to convert to json")
+    }
 
-    serde_json::to_string_pretty(&response).unwrap()
+    pub async fn get_open_positions(&self) -> serde_json::Value {
+        let endpoint = format!("{}/{}", &self.base_endpoint, "positions");
+
+        self.client
+            .get(endpoint)
+            .send()
+            .await
+            .expect("Unable to get open positions")
+            .json()
+            .await
+            .expect("Unable to convert to json")
+    }
 }
