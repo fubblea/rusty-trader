@@ -59,4 +59,17 @@ impl Alpaca {
             .await
             .expect("Unable to convert to json")
     }
+
+    pub async fn get_open_orders(&self) -> serde_json::Value {
+        let endpoint = format!("{}/{}", &self.base_endpoint, "orders?status=open");
+
+        self.client
+            .get(endpoint)
+            .send()
+            .await
+            .expect("Unable to get open positions")
+            .json()
+            .await
+            .expect("Unable to convert to json")
+    }
 }

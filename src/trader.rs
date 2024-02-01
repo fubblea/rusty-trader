@@ -1,6 +1,6 @@
 use std::sync::Arc;
 
-use axum::extract::State;
+use axum::{extract::State, response::Html};
 
 use crate::alpaca::Alpaca;
 
@@ -28,12 +28,20 @@ pub async fn get_account(State(trader_bot): State<Arc<Trader>>) -> String {
     serde_json::to_string_pretty(account_details).unwrap()
 }
 
-pub async fn get_state(State(trader_bot): State<Arc<Trader>>) -> String {
-    let open_positions = &trader_bot.alpaca.get_open_positions().await;
-    let positions = serde_json::to_string_pretty(open_positions).unwrap();
+pub async fn get_state(State(trader_bot): State<Arc<Trader>>) -> Html<String> {
+    let positions =
+        serde_json::to_string_pretty(&trader_bot.alpaca.get_open_positions().await).unwrap();
+    let orders = serde_json::to_string_pretty(&trader_bot.alpaca.get_open_orders().await).unwrap();
 
-    format!(
-        "State: {:?}\nOpen Positions: {}",
-        &trader_bot.state, positions
-    )
+    let response = format!(
+        "<body text=\"#ffffff\" style=\"background-color:black;\">
+        <h1>Rusty Trader</h1>\n
+        <h2>State:</h2>\n{:?}\n
+        <h2>Open Positions:</h2>\n{}\n
+        <h2>Open Orders:</h2>\n{}
+        </body>",
+        &trader_bot.state, positions, orders
+    );
+
+    Html(response)
 }
