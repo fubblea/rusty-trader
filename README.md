@@ -1,5 +1,7 @@
 # rusty-trader
 
+[![Deploy Pipline](https://github.com/fubblea/rusty-trader/actions/workflows/DeployPipeline.yaml/badge.svg)](https://github.com/fubblea/rusty-trader/actions/workflows/DeployPipeline.yaml)
+
 ## Usage
 
 Docker Compose:
