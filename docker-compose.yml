@@ -4,7 +4,7 @@ services:
     container_name: rusty-trader
     image: ghcr.io/fubblea/rusty-trader:latest
     ports:
-      - 80:3000
+      - 3000:3000
     environment:
       - ACCESS_KEY=${ALPACA_ACCESS_KEY}
       - SECRET_KEY=${ALPACA_SECRET_KEY}

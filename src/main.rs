@@ -16,6 +16,9 @@ async fn main() {
         .route("/account", get(trader::get_account))
         .with_state(trader_bot);
 
-    let listener = tokio::net::TcpListener::bind("0.0.0.0:3000").await.unwrap();
+    let bind_address = "0.0.0.0:3000".to_string();
+    let listener = tokio::net::TcpListener::bind(&bind_address).await.unwrap();
+    println!("Serving on {}", &bind_address);
+
     axum::serve(listener, app).await.unwrap();
 }
