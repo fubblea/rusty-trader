@@ -22,9 +22,9 @@ jobs:
         id: get_version
         run: |
           cd init
-          echo "version=$(cargo pkgid | cut -d# -f2)" >> "$GITHUB_OUTPUT"
+          echo "version=$(cargo pkgid)" >> "$GITHUB_OUTPUT"
           echo "# Init Summary" >> $GITHUB_STEP_SUMMARY
-          echo "Found package version: $(cargo pkgid | cut -d# -f2)"  >> $GITHUB_STEP_SUMMARY
+          echo "Found package version: $(cargo pkgid)"  >> $GITHUB_STEP_SUMMARY
 
   tests:
     needs:
