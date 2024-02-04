@@ -8,6 +8,10 @@ on:
         type: string
         required: true
 
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -23,5 +27,5 @@ jobs:
           cd build
           echo "# Build Summary 🐳" >> $GITHUB_STEP_SUMMARY
           echo "Building version: ${{ inputs.version }}" >> $GITHUB_STEP_SUMMARY
-          docker build -t ghcr.io/${{ github.repository }}:${{ inputs.version }}
-          echo "Built image: ghcr.io/${{ github.repository }}:${{ inputs.version }}" >> $GITHUB_STEP_SUMMARY
+          docker build -t ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ inputs.version }} .
+          echo "Built image: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ inputs.version }}" >> $GITHUB_STEP_SUMMARY
