@@ -30,19 +30,10 @@ jobs:
       - init
     uses: ./.github/workflows/RunTests.yaml
 
-  build:
-    needs:
-      - init
-      - tests
-    uses: ./.github/workflows/DockerBuild.yaml
-    with:
-      version: ${{ needs.init.outputs.version }}
-
   deploy:
     needs:
       - init
       - tests
-      - build
     uses: ./.github/workflows/DockerDeploy.yaml
     with:
       version: ${{ needs.init.outputs.version }}
