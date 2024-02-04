@@ -1,3 +1,4 @@
+# This compose file is for local testing only. For deployment, pull the latest image from github
 version: '3.3'
 services:
   rusty-trader:
