@@ -1,11 +1,10 @@
-name: Build Pipline
+name: Deploy Pipline
 
 on:
   workflow_dispatch:
   push:
     branches:
       - master
-      - pipelines
 
 jobs:
   init:
