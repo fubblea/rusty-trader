@@ -19,4 +19,4 @@ services:
       - SECRET_KEY=${ALPACA_SECRET_KEY}
 ```
 
-Get Alpaca keys from here: https://app.alpaca.markets/brokerage/new-account
+Get Alpaca keys from here: <https://app.alpaca.markets/brokerage/new-account>
