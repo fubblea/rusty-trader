@@ -24,7 +24,7 @@ jobs:
           cd init
           echo "version=$(cargo pkgid)" >> "$GITHUB_OUTPUT"
           echo "# Init Summary" >> $GITHUB_STEP_SUMMARY
-          echo "Found package version: $(cargo pkgid)"  >> $GITHUB_STEP_SUMMARY
+          echo "Found package version: $(ls)"  >> $GITHUB_STEP_SUMMARY
 
   tests:
     needs:
