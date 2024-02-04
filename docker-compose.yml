@@ -1,13 +1,10 @@
-# This compose file is for local testing only. For deployment, pull the latest image from github
 version: '3.3'
 services:
   rusty-trader:
     container_name: rusty-trader
-    build:
-      context: ./
-      dockerfile: Dockerfile
+    image: ghcr.io/fubblea/rusty-trader:latest
     ports:
-      - 3000:3000
+      - 80:3000
     environment:
-      - ACCESS_KEY=${ACCESS_KEY}
-      - SECRET_KEY=${SECRET_KEY}
+      - ACCESS_KEY=${ALPACA_ACCESS_KEY}
+      - SECRET_KEY=${ALPACA_SECRET_KEY}

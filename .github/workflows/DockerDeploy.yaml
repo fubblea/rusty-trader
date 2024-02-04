@@ -38,4 +38,4 @@ jobs:
         with:
           context: deploy/
           push: true
-          tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ inputs.version }}
+          tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ inputs.version }}, ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
