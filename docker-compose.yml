@@ -11,3 +11,4 @@ services:
     environment:
       - ACCESS_KEY=${ALPACA_ACCESS_KEY}
       - SECRET_KEY=${ALPACA_SECRET_KEY}
+      - RUST_LOG=info

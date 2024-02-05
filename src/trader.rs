@@ -9,15 +9,16 @@ enum TraderState {
     Waiting,
 }
 
+#[derive(Debug)]
 pub struct Trader {
     alpaca: Alpaca,
     state: TraderState,
 }
 
 impl Trader {
-    pub fn new() -> Self {
+    pub async fn new() -> Self {
         Self {
-            alpaca: Alpaca::new(),
+            alpaca: Alpaca::new().await,
             state: TraderState::Waiting,
         }
     }
@@ -29,9 +30,9 @@ pub async fn get_account(State(trader_bot): State<Arc<Trader>>) -> String {
 }
 
 pub async fn get_state(State(trader_bot): State<Arc<Trader>>) -> Html<String> {
-    let positions =
-        serde_json::to_string_pretty(&trader_bot.alpaca.get_open_positions().await).unwrap();
-    let orders = serde_json::to_string_pretty(&trader_bot.alpaca.get_open_orders().await).unwrap();
+    let positions = &trader_bot.alpaca.get_open_positions().await;
+    let orders = &trader_bot.alpaca.get_open_orders().await;
+    let watchlist = trader_bot.alpaca.get_watchlist().await;
 
     let response = format!(
         "<body text=\"#ffffff\" style=\"background-color:black;\">
@@ -39,8 +40,12 @@ pub async fn get_state(State(trader_bot): State<Arc<Trader>>) -> Html<String> {
         <h2>State:</h2>\n{:?}\n
         <h2>Open Positions:</h2>\n{}\n
         <h2>Open Orders:</h2>\n{}
+        <h2>Watchlist:</h2>\n{}
         </body>",
-        &trader_bot.state, positions, orders
+        &trader_bot.state,
+        serde_json::to_string_pretty(positions).unwrap(),
+        serde_json::to_string_pretty(orders).unwrap(),
+        serde_json::to_string_pretty(watchlist).unwrap(),
     );
 
     Html(response)

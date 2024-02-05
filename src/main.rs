@@ -1,6 +1,7 @@
 use std::sync::Arc;
 
 use axum::{routing::get, Router};
+use log::info;
 
 mod alpaca;
 mod trader;
@@ -9,7 +10,9 @@ use trader::Trader;
 
 #[tokio::main]
 async fn main() {
-    let trader_bot = Arc::new(Trader::new());
+    env_logger::init();
+
+    let trader_bot = Arc::new(Trader::new().await);
 
     let app = Router::new()
         .route("/", get(trader::get_state))
@@ -18,7 +21,7 @@ async fn main() {
 
     let bind_address = "0.0.0.0:3000".to_string();
     let listener = tokio::net::TcpListener::bind(&bind_address).await.unwrap();
-    println!("Serving on {}", &bind_address);
+    info!("Serving on {}", &bind_address);
 
     axum::serve(listener, app).await.unwrap();
 }
