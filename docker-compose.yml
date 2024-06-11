@@ -1,0 +1,14 @@
+# This compose file is for local development only
+# Use `image: ghcr.io/fubblea/rusty-trader:latest` for production
+
+services:
+  rusty-trader:
+    container_name: rusty-trader
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 80:3000
+    environment:
+      - ACCESS_KEY=${ALPACA_ACCESS_KEY}
+      - SECRET_KEY=${ALPACA_SECRET_KEY}

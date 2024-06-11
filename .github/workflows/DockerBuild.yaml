@@ -1,0 +1,31 @@
+name: Build Image
+
+on:
+  workflow_call:
+    inputs:
+      version:
+        description: Package version
+        type: string
+        required: true
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v4
+        with:
+          path: build/
+
+      - name: Build Docker Image
+        run: |
+          cd build
+          echo "# Build Summary 🐳" >> $GITHUB_STEP_SUMMARY
+          echo "Building version: ${{ inputs.version }}" >> $GITHUB_STEP_SUMMARY
+          docker build -t ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ inputs.version }} .
+          echo "Built image: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ inputs.version }}" >> $GITHUB_STEP_SUMMARY
