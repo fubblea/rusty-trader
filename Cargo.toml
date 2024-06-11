@@ -1,12 +1,8 @@
 [workspace]
 resolver = "2"
 
-members = [
-  "trader",
-  "dash",
-  "common",
-  "controller",
-]
+members = ["trader", "dash", "common", "controller"]
 
 [workspace.dependencies]
-iceoryx2 = "0.3.0"
+iceoryx2 = { version = "0.3.0", features = ["logger_log"] }
+log = "0.4.21"

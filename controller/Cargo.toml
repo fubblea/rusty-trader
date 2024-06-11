@@ -4,5 +4,8 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-iceoryx2 = {workspace = true}
-common = {path = "../common/"}
+iceoryx2 = { workspace = true }
+log = { workspace = true }
+common = { path = "../common/" }
+tokio = { version = "1.38", features = ["full"] }
+simple_logger = "5"
