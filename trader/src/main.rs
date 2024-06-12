@@ -1,6 +1,8 @@
 use common::TraderState;
 use core::time::Duration;
 use iceoryx2::prelude::*;
+use log::info;
+use simple_logger::SimpleLogger;
 
 use clap::Parser;
 
@@ -21,10 +23,20 @@ struct Args {
     service_name: String,
 }
 
-const CYCLE_TIME: Duration = Duration::from_secs(1);
+// Trader communicates at 200Hz
+const CYCLE_TIME: Duration = Duration::from_millis(5);
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
+    SimpleLogger::new()
+        .with_level(log::LevelFilter::Info)
+        .init()?;
+
     let args = Args::parse();
+
+    info!(
+        "Starting trader with id: {}, config: {}, service name: {}",
+        args.id, args.config, args.service_name
+    );
 
     let service_name = ServiceName::new(&args.service_name)?;
 

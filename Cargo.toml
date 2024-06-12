@@ -6,3 +6,4 @@ members = ["trader", "dash", "common", "controller"]
 [workspace.dependencies]
 iceoryx2 = { version = "0.3.0", features = ["logger_log"] }
 log = "0.4.21"
+simple_logger = "5"
