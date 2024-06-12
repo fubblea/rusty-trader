@@ -12,3 +12,11 @@ services:
     environment:
       - ACCESS_KEY=${ALPACA_ACCESS_KEY}
       - SECRET_KEY=${ALPACA_SECRET_KEY}
+      - MONGO_URI=mongodb://mongo:27017
+
+  mongo:
+    image: mongo
+    volumes:
+      - ./test/mongodb_data:/data/db
+    ports:
+      - 27017:27017

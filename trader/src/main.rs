@@ -1,7 +1,7 @@
-use common::TraderState;
+use common::{mongo::Mongo, Trader, TraderState};
 use core::time::Duration;
 use iceoryx2::prelude::*;
-use log::info;
+use log::{error, info};
 use simple_logger::SimpleLogger;
 
 use clap::Parser;
@@ -12,21 +12,23 @@ use clap::Parser;
 struct Args {
     /// Trader id
     #[arg(short, long)]
-    id: u64,
+    id: u32,
 
     /// Trader config
     #[arg(short, long)]
-    config: u64,
+    config: u32,
 
     /// Trader service name
     #[arg(short, long)]
     service_name: String,
+
+    /// Trader cycle time
+    #[arg(short, long, default_value_t = 5)]
+    cycle_time: u64,
 }
 
-// Trader communicates at 200Hz
-const CYCLE_TIME: Duration = Duration::from_millis(5);
-
-fn main() -> Result<(), Box<dyn std::error::Error>> {
+#[tokio::main]
+async fn main() -> Result<(), Box<dyn std::error::Error>> {
     SimpleLogger::new()
         .with_level(log::LevelFilter::Info)
         .init()?;
@@ -46,14 +48,30 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     let publisher = service.publisher().create()?;
 
-    while let Iox2Event::Tick = Iox2::wait(CYCLE_TIME) {
+    let trader = Trader::new(args.id, args.config, args.cycle_time);
+    let mut mongo = Mongo::new(None).await?;
+
+    while let Iox2Event::Tick = Iox2::wait(Duration::from_millis(args.cycle_time)) {
         let sample = publisher.loan_uninit()?;
 
-        let payload = TraderState::Waiting;
+        let state = step(&trader, &mut mongo).await?;
 
-        let sample = sample.write_payload(payload);
+        let sample = sample.write_payload(state);
         sample.send()?;
     }
 
     Ok(())
+}
+
+async fn step(
+    trader: &Trader,
+    mongo: &mut Mongo,
+) -> Result<TraderState, Box<dyn std::error::Error>> {
+    match mongo.get_config(trader.config_id).await? {
+        Some(_) => Ok(TraderState::Waiting),
+        None => {
+            error!("No config found for trader with id: {}", trader.id);
+            Ok(TraderState::NotAvailable)
+        }
+    }
 }

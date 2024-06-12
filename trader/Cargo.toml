@@ -1,6 +1,6 @@
 [package]
 name = "trader"
-version = "0.1.0"
+version = {workspace = true}
 edition = "2021"
 
 [dependencies]
@@ -9,3 +9,4 @@ common = { path = "../common/" }
 clap = { version = "4.5.7", features = ["derive"] }
 log = { workspace = true }
 simple_logger = { workspace = true }
+tokio = { workspace = true }
