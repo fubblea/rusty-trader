@@ -16,16 +16,10 @@ jobs:
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v4
-        with:
-          path: init/
+
       - name: Get Version
         id: get_version
-        run: |
-          cd init
-          cargo build
-          echo "version=$(cargo pkgid | cut -d "@" -f2)" >> "$GITHUB_OUTPUT"
-          echo "# Init Summary" >> $GITHUB_STEP_SUMMARY
-          echo "Found package version: $(cargo pkgid | cut -d "@" -f2)"  >> $GITHUB_STEP_SUMMARY
+        uses: ./.github/actions/pipeline_init
 
   tests:
     needs:

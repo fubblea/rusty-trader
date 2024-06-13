@@ -1,0 +1,11 @@
+[package]
+name = "controller"
+version = { workspace = true }
+edition = "2021"
+
+[dependencies]
+iceoryx2 = { workspace = true }
+log = { workspace = true }
+simple_logger = { workspace = true }
+common = { path = "../common/" }
+tokio = { workspace = true }

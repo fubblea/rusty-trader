@@ -1,0 +1,20 @@
+name: Init Pipeline
+
+outputs:
+  version:
+    description: "The version of the package"
+    value: ${{ steps.get_version.outputs.version }}
+
+runs:
+  using: "composite"
+  steps:
+    - name: Get Version
+      id: get_version
+      run: |
+        cd ./controller
+        cargo build
+        export VERSION=$(cargo pkgid | cut -d "#" -f2)
+        echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+        echo "# Init Summary" >> $GITHUB_STEP_SUMMARY
+        echo "Found package version: $VERSION"  >> $GITHUB_STEP_SUMMARY
+      shell: bash

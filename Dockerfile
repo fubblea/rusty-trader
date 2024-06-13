@@ -4,7 +4,7 @@
 FROM rust:bullseye AS build
 
 RUN apt-get update -y && \
-    apt-get install -y ca-certificates
+    apt -y install libclang-dev
 
 WORKDIR /rusty-trader
 COPY ./ .
@@ -15,5 +15,9 @@ RUN cargo build --release
 ####################################################################################################
 FROM gcr.io/distroless/cc-debian11
 
-COPY --from=build /rusty-trader/target/release/rusty-trader ./
-ENTRYPOINT ["./rusty-trader"]
+# Copy the binary from the build stage
+COPY --from=build /rusty-trader/target/release/controller ./
+COPY --from=build /rusty-trader/target/release/dash ./
+COPY --from=build /rusty-trader/target/release/trader ./
+
+ENTRYPOINT ["./controller"]

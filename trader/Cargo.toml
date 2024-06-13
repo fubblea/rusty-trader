@@ -1,0 +1,12 @@
+[package]
+name = "trader"
+version = {workspace = true}
+edition = "2021"
+
+[dependencies]
+iceoryx2 = { workspace = true }
+common = { path = "../common/" }
+clap = { version = "4.5.7", features = ["derive"] }
+log = { workspace = true }
+simple_logger = { workspace = true }
+tokio = { workspace = true }
